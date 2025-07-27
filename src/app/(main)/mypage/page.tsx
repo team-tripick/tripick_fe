@@ -1,10 +1,10 @@
 'use client';
 
 import { Button, UserDelModal } from '@/components';
-import { colors, Flex, Text } from '@/design-token';
+import { colors, Flex, Skeleton, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Mypage() {
   const router = useRouter();
@@ -13,6 +13,14 @@ export default function Mypage() {
     email: 'pjylove08@gmail.com',
     name: '박지연',
   });
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   const handleUserDelClick = () => {
     setIsOpen(true);
@@ -30,15 +38,23 @@ export default function Mypage() {
     <Flex paddingTop="100px" paddingLeft="100px" paddingRight="100px">
       <Flex isColumn={true} gap={24} width="100%">
         <Flex isColumn={true} gap={12}>
-          <Text isSpan={true} fontSize={32} fontWeight={700}>
-            {datas.name}
-            <Text isSpan={true} fontSize={32} fontWeight={400}>
-              님
+          {isLoading ? (
+            <TextSkeleton>{datas.name}님</TextSkeleton>
+          ) : (
+            <Text isSpan={true} fontSize={32} fontWeight={700}>
+              {datas.name}
+              <Text isSpan={true} fontSize={32} fontWeight={400}>
+                님
+              </Text>
             </Text>
-          </Text>
-          <Text fontSize={14} fontWeight={400} color={colors.gray[500]}>
-            {datas.email}
-          </Text>
+          )}
+          {isLoading ? (
+            <TextSkeleton>{datas.email}</TextSkeleton>
+          ) : (
+            <Text fontSize={14} fontWeight={400} color={colors.gray[500]}>
+              {datas.email}
+            </Text>
+          )}
         </Flex>
         <MessageContainer>
           <Text fontSize={20} fontWeight={600} color={colors.gray[800]}>
@@ -86,4 +102,10 @@ const MessageContainer = styled.div`
   gap: 10px;
   border-radius: 12px;
   background-color: ${colors.gray[200]};
+`;
+
+const TextSkeleton = styled(Skeleton)`
+  font-size: 20px;
+  font-weight: 600;
+  color: transparent;
 `;

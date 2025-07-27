@@ -1,14 +1,22 @@
 'use client';
 
 import { DelModal } from '@/components';
-import { colors, Flex, Text } from '@/design-token';
+import { colors, Flex, Skeleton, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function LogDetail() {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [datas, setDatas] = useState<{
@@ -44,29 +52,43 @@ export default function LogDetail() {
     >
       <Flex width="100%" justifyContent="space-between">
         <Flex isColumn={true} gap={12}>
-          <Text fontSize={36} fontWeight={700}>
-            {datas.title}
-          </Text>
-          <Flex alignItems="center" gap={4}>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              {datas.date.startDate}
+          {isLoading ? (
+            <TextSkeleton>{datas.title}</TextSkeleton>
+          ) : (
+            <Text fontSize={36} fontWeight={700}>
+              {datas.title}
             </Text>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              ~
-            </Text>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              {datas.date.endDate}
-            </Text>
-          </Flex>
+          )}
+          {isLoading ? (
+            <TextSkeleton>
+              {datas.date.startDate + '~' + datas.date.endDate}
+            </TextSkeleton>
+          ) : (
+            <Flex alignItems="center" gap={4}>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                {datas.date.startDate}
+              </Text>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                ~
+              </Text>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                {datas.date.endDate}
+              </Text>
+            </Flex>
+          )}
         </Flex>
         <Flex gap={12}>
           <Btn onClick={() => router.push('/log-edit')}>수정</Btn>
           <Btn onClick={handleDelClick}>삭제</Btn>
         </Flex>
       </Flex>
-      <Mark>
-        <ReactMarkdown>{datas.log}</ReactMarkdown>
-      </Mark>
+      {isLoading ? (
+        <TextSkeleton>{datas.log}</TextSkeleton>
+      ) : (
+        <Mark>
+          <ReactMarkdown>{datas.log}</ReactMarkdown>
+        </Mark>
+      )}
       {isOpen && (
         <DelModal
           delClick={handleRealDelClick}
@@ -85,4 +107,10 @@ const Mark = styled.div`
 const Btn = styled.div`
   font-size: 16px;
   color: ${colors.gray[600]};
+`;
+
+const TextSkeleton = styled(Skeleton)`
+  font-size: 20px;
+  font-weight: 600;
+  color: transparent;
 `;
