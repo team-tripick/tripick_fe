@@ -1,10 +1,10 @@
 'use client';
 
 import { Keyword, LogPost, Button, DelModal } from '@/components';
-import { colors, Flex, Text } from '@/design-token';
+import { colors, Flex, Skeleton, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function PlanDetail() {
@@ -65,6 +65,14 @@ export default function PlanDetail() {
     //del api
   };
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <Flex
       isColumn={true}
@@ -78,35 +86,53 @@ export default function PlanDetail() {
       <Flex width="100%" justifyContent="space-between">
         <Flex isColumn={true} gap={12}>
           <Flex gap={24} alignItems="center">
-            <Text fontSize={36} fontWeight={700}>
-              {datas.title}
-            </Text>
+            {isLoading ? (
+              <TextSkeleton>{datas.title}</TextSkeleton>
+            ) : (
+              <Text fontSize={36} fontWeight={700}>
+                {datas.title}
+              </Text>
+            )}
             <Flex gap={12}>
-              {datas.keyword.map((data, index) => (
-                <Keyword key={index}>{data}</Keyword>
-              ))}
+              {isLoading ? (
+                <TextSkeleton>{datas.keyword}</TextSkeleton>
+              ) : (
+                datas.keyword.map((data, index) => (
+                  <Keyword key={index}>{data}</Keyword>
+                ))
+              )}
             </Flex>
           </Flex>
-          <Flex alignItems="center" gap={4}>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              {datas.date.startDate}
-            </Text>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              ~
-            </Text>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
-              {datas.date.endDate}
-            </Text>
-          </Flex>
+          {isLoading ? (
+            <TextSkeleton>
+              {datas.date.startDate + '~' + datas.date.endDate}
+            </TextSkeleton>
+          ) : (
+            <Flex alignItems="center" gap={4}>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                {datas.date.startDate}
+              </Text>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                ~
+              </Text>
+              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+                {datas.date.endDate}
+              </Text>
+            </Flex>
+          )}
         </Flex>
         <Flex gap={12}>
           <Btn onClick={() => router.push('/plan-edit')}>수정</Btn>
           <Btn onClick={handleDelClick}>삭제</Btn>
         </Flex>
       </Flex>
-      <Mark>
-        <ReactMarkdown>{datas.plan}</ReactMarkdown>
-      </Mark>
+      {isLoading ? (
+        <TextSkeleton>{datas.plan}</TextSkeleton>
+      ) : (
+        <Mark>
+          <ReactMarkdown>{datas.plan}</ReactMarkdown>
+        </Mark>
+      )}
       <Flex isColumn={true} gap={20} width="100%">
         <Flex width="100%" justifyContent="space-between" alignItems="center">
           <Text fontSize={24} fontWeight={600}>
@@ -119,6 +145,7 @@ export default function PlanDetail() {
         <Flex width="100%" isColumn={true} gap={16}>
           {datas.log.map((data, index) => (
             <LogPost
+              isLoading={isLoading}
               onClick={() => router.push(`/log-detail/:${data.id}`)}
               key={index}
               title={data.title}
@@ -146,4 +173,10 @@ const Mark = styled.div`
 const Btn = styled.div`
   font-size: 16px;
   color: ${colors.gray[600]};
+`;
+
+const TextSkeleton = styled(Skeleton)`
+  font-size: 20px;
+  font-weight: 600;
+  color: transparent;
 `;

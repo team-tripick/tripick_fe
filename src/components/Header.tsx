@@ -47,7 +47,7 @@ export default function Header() {
           </Text>
         </Flex>
       ) : (
-        <Btn>로그인</Btn>
+        <Btn onClick={() => router.push('/login')}>로그인</Btn>
       )}
     </HeaderContainer>
   );

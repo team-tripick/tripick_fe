@@ -3,10 +3,11 @@
 import { Button, PlanPost } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Plan() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [datas, setDatas] = useState<
     {
       id: number;
@@ -144,6 +145,12 @@ export default function Plan() {
     },
   ]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
+
   return (
     <Flex
       paddingBottom="70px"
@@ -176,6 +183,7 @@ export default function Plan() {
       <Flex width="100%" isColumn={true} gap={12}>
         {datas.map((data, index) => (
           <PlanPost
+            isLoading={isLoading}
             onClick={() => router.push(`/plan-detail/:${data.id}`)}
             key={index}
             title={data.title}
