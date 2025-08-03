@@ -1,21 +1,26 @@
 'use client';
 
+import { useLogDel, useLogDetail } from '@/apis';
 import { DelModal } from '@/components';
 import { colors, Flex, Skeleton, Text } from '@/design-token';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function LogDetail() {
   const router = useRouter();
+  const id = useParams()
+  const logId = Number(id.id);
+
+  const {data} = useLogDetail(logId)
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -24,20 +29,35 @@ export default function LogDetail() {
     date: { startDate: string; endDate: string };
     log: string;
   }>({
-    title: '2025 여름 제주 여행',
+    title: '',
     date: {
-      startDate: '2025-07-15',
-      endDate: '2025-07-20',
+      startDate: '',
+      endDate: '',
     },
-    log: '# 제주 여행 계획\n\n## Day 1\n- 공항 도착\n- 렌트카 픽업\n- 숙소 체크인\n\n## Day 2\n- 성산 일출봉 등반\n- 우도 배 타고 다녀오기\n\n## Day 3\n- 협재 해수욕장\n- 카페 투어\n\n## Day 4\n- 시장 구경\n- 기념품 쇼핑\n\n## Day 5\n- 체크아웃 및 귀가',
+    log: '',
   });
+
+  useEffect(() => {
+    if (data && typeof data === 'object') {
+      setDatas({
+        title: data.title,
+        log: data.log,
+        date: { startDate: data.startDate, endDate: data.endDate },
+      });
+    }
+  }, [data]);
 
   const handleDelClick = () => {
     setIsOpen(true);
   };
 
+  const logDelApi = useLogDel()
   const handleRealDelClick = () => {
-    //del api
+    logDelApi.mutate(logId, {
+      onSuccess: () => {
+        router.push(`/plan-detail/${data.planId}`)
+      }
+    })
   };
 
   return (
@@ -78,7 +98,7 @@ export default function LogDetail() {
           )}
         </Flex>
         <Flex gap={12}>
-          <Btn onClick={() => router.push('/log-edit')}>수정</Btn>
+          <Btn onClick={() => router.push(`/log-edit/${logId}`)}>수정</Btn>
           <Btn onClick={handleDelClick}>삭제</Btn>
         </Flex>
       </Flex>
@@ -86,7 +106,7 @@ export default function LogDetail() {
         <TextSkeleton>{datas.log}</TextSkeleton>
       ) : (
         <Mark>
-          <ReactMarkdown>{datas.log}</ReactMarkdown>
+          <ReactMarkdown>{datas.log.replace(/\n/g, '  \n')}</ReactMarkdown>
         </Mark>
       )}
       {isOpen && (
@@ -102,6 +122,9 @@ export default function LogDetail() {
 
 const Mark = styled.div`
   width: 100%;
+  height: 300px;
+  overflow-y: scroll;
+  line-height: 1.6;
 `;
 
 const Btn = styled.div`

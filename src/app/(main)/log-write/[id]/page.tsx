@@ -1,12 +1,15 @@
 'use client';
 
+import { useLogWrite } from '@/apis';
 import { Button, DateInput, Inputs, MarkDownContent } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function LogWrite() {
   const router = useRouter();
+  const id = useParams()
+    const planId = Number(id.id);
   const [datas, setDatas] = useState<{
     title: string;
     date: { startDate: string; endDate: string };
@@ -16,6 +19,8 @@ export default function LogWrite() {
     date: { startDate: '', endDate: '' },
     log: '',
   });
+
+  const  logWriteApi = useLogWrite()
 
   const [date, setDate] = useState<{ startDate: string; endDate: string }>({
     startDate: '',
@@ -37,7 +42,11 @@ export default function LogWrite() {
   };
 
   const handleWriteClick = () => {
-    //write api
+    logWriteApi.mutate({title: datas.title, log: datas.log, date: datas.date, planId: planId}, {
+      onSuccess: () => {
+        router.push(`/plan-detail/${planId}`)
+      }
+    })
   };
 
   return (
@@ -75,8 +84,8 @@ export default function LogWrite() {
           width="743px"
           onChange={handleTitleChange}
           value={datas.title}
-          label="키워드"
-          placeholder="키워드를 입력하세요"
+          label="제목"
+          placeholder="제목을 입력하세요"
         />
         <DateInput label="일정" data={date} setData={setDate} />
         <MarkDownContent
@@ -89,3 +98,4 @@ export default function LogWrite() {
     </Flex>
   );
 }
+

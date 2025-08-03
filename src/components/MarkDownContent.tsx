@@ -50,6 +50,7 @@ const MarkDown = styled.div`
   width: 50%;
   height: 300px;
   overflow-y: scroll;
+  line-height: 1.6;
 `;
 
 const TextArea = styled.textarea`
