@@ -17,6 +17,7 @@ export default function RootLayout({
         autoClose={3000} // 3초 후 자동 닫힘
         hideProgressBar={false}
         newestOnTop={false}
+        theme="colored"
         closeOnClick
         pauseOnHover
         draggable
