@@ -1,8 +1,9 @@
 'use client';
 
+import { useLogDetail, useLogEdit } from '@/apis';
 import { Button, DateInput, Inputs, MarkDownContent } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function LogEdit() {
@@ -22,6 +23,28 @@ export default function LogEdit() {
     endDate: '',
   });
 
+  const id = useParams()
+  const logId = Number(id.id);
+  
+  const {data} = useLogDetail(logId)
+
+  console.log(data)
+  console.log(datas)
+
+    useEffect(() => {
+      if (data && typeof data === 'object') {
+        setDatas((prev) => ({
+          ...prev,
+          title: data.title,
+          log: data.log,
+        }));
+        setDate({
+          startDate: data.startDate,
+          endDate: data.endDate
+        })
+      }
+    }, [data]);
+
   useEffect(() => {
     setDatas((prev) => ({
       ...prev,
@@ -36,8 +59,14 @@ export default function LogEdit() {
     setDatas((prev) => ({ ...prev, title: e.target.value }));
   };
 
+
+  const editApi = useLogEdit()
   const handleEditClick = () => {
-    //edit api
+    editApi.mutate({title : datas.title, date: datas.date, log: datas.log, logId: logId}, {
+      onSuccess: () => {
+        router.push(`/log-detail/${logId}`)
+      }
+    })
   };
 
   return (

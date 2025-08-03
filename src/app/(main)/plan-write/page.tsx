@@ -1,5 +1,6 @@
 'use client';
 
+import { usePlanWrite } from '@/apis';
 import {
   Button,
   DateInput,
@@ -64,6 +65,9 @@ export default function PlanWrite() {
     }
   };
 
+
+  console.log(datas.place)
+
   const handleKeywordDel = (index: number) => {
     setDatas((prev) => {
       const newKeywords = [...prev.keyword];
@@ -72,8 +76,16 @@ export default function PlanWrite() {
     });
   };
 
+  const writeApi = usePlanWrite()
+
   const handleWriteClick = () => {
-    //write api
+    writeApi.mutate({place : datas.place, keyword: datas.keyword, date: datas.date, plan: datas.plan},
+      {
+        onSuccess: () => {
+          router.push('/plan')
+        }
+      }
+    )
   };
 
   return (

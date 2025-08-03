@@ -1,24 +1,38 @@
 'use client';
 
+import { useAuthLoginApi } from '@/apis';
 import { Button, Inputs } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
+import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+
 
 export default function Login() {
   const router = useRouter();
-  const [datas, setDatas] = useState<{ id: string; password: string }>({
-    id: '',
+  const [datas, setDatas] = useState<{ email: string; password: string }>({
+    email: '',
     password: '',
   });
 
-  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDatas((prev) => ({ ...prev, id: e.target.value }));
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDatas((prev) => ({ ...prev, email: e.target.value }));
   };
 
   const handlePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDatas((prev) => ({ ...prev, password: e.target.value }));
   };
+
+  const loginApi = useAuthLoginApi()
+
+  const handleLoginClick = () => {
+    loginApi.mutate({email : datas.email, password: datas.password}, {
+      onSuccess: () => {
+        router.push('/')
+      }
+    })
+  }
 
   return (
     <Flex
@@ -27,7 +41,8 @@ export default function Login() {
       width="100%"
       height="calc(100vh - 80px)"
     >
-      <Flex isColumn={true} gap={64} width="428px">
+      <Flex isColumn={true} gap={20} width="428px" alignItems='center'>
+      <Flex isColumn={true} gap={64} width="100%">
         <Flex isColumn={true} gap={16}>
           <Text fontSize={36} fontWeight={700}>
             로그인
@@ -38,10 +53,10 @@ export default function Login() {
         </Flex>
         <Flex isColumn={true} gap={32} width="100%">
           <Inputs
-            placeholder="아이디를 입력하세요"
-            label="아이디"
-            onChange={handleIdChange}
-            value={datas.id}
+            placeholder="이메일을 입력하세요"
+            label="이메일"
+            onChange={handleEmailChange}
+            value={datas.email}
           />
           <Inputs
             placeholder="비밀번호를 입력하세요"
@@ -51,10 +66,18 @@ export default function Login() {
             isPwd={true}
           />
         </Flex>
-        <Button onClick={() => router.push('/')} width="100%">
+        <Button onClick={handleLoginClick} width="100%">
           로그인
         </Button>
+      </Flex>
+      <Flex gap={8}><Text fontSize={16} fontWeight={400} color={colors.gray[600]}>계정이 없다면?</Text><Nav onClick={() => router.push('/signup')}>회원가입</Nav></Flex>
       </Flex>
     </Flex>
   );
 }
+
+const Nav = styled.button `
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 16px;
+`
