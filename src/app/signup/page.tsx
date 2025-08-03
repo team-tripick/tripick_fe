@@ -29,6 +29,8 @@ export default function SignUp() {
     password2: '',
   });
 
+  const [email, setEmail] = useState<string>('')
+
   const [code, setCode] = useState<string>('');
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +41,7 @@ export default function SignUp() {
     setCode(e.target.value);
   };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDatas((prev) => ({ ...prev, email: e.target.value }));
+    setEmail(e.target.value);
   };
 
   const handlePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,12 +64,16 @@ export default function SignUp() {
 
   const emailApi = useEmailVerify()
   const handleEmailClick = () => {
-    emailApi.mutate({email :datas.email})
+    emailApi.mutate({email : email})
   };
 
   const authCodeCheckApi = useEmailAuthCodeCheck()
   const handleBlurCodeCheck = () => {
-    authCodeCheckApi.mutate({email : datas.email, authCode : code})
+    authCodeCheckApi.mutate({email : email, authCode : code},{
+      onSuccess: () => {
+        setDatas((prev) => ({...prev, email: email }))
+      }
+    })
   }
 
   const signupApi = useAuthSignupApi()
@@ -110,7 +116,7 @@ export default function SignUp() {
               placeholder="이메일을 입력하세요"
               label="이메일"
               onChange={handleEmailChange}
-              value={datas.email}
+              value={email}
             />
             <Button onClick={handleEmailClick}>인증</Button>
           </Flex>
