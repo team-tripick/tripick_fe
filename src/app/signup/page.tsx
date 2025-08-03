@@ -1,19 +1,22 @@
 'use client';
 
+import { useAuthSignupApi } from '@/apis';
+import { useEmailAuthCodeCheck, useEmailVerify } from '@/apis/email';
 import { Button, Inputs } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
+import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function SignUp() {
   const router = useRouter();
   const [datas, setDatas] = useState<{
-    id: string;
+    name: string;
     email: string;
     password: string;
   }>({
-    id: '',
+    name: '',
     email: '',
     password: '',
   });
@@ -28,8 +31,8 @@ export default function SignUp() {
 
   const [code, setCode] = useState<string>('');
 
-  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDatas((prev) => ({ ...prev, id: e.target.value }));
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDatas((prev) => ({ ...prev, name: e.target.value }));
   };
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,24 +49,35 @@ export default function SignUp() {
     setPassword((prev) => ({ ...prev, password2: e.target.value }));
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (password.password1 && password.password2) {
-        if (password.password1 !== password.password2) {
-          toast.error('비밀번호가 일치하지 않습니다.');
-        } else {
-          toast.success('비밀번호 인증이 완료되었습니다.');
-          setDatas((prev) => ({ ...prev, password: password.password1 }));
-        }
+  const handlePwdCheckBlur = () => {
+    if (password.password1 && password.password2) {
+      if (password.password1 !== password.password2) {
+        toast.error('비밀번호가 일치하지 않습니다.');
+      } else {
+        toast.success('비밀번호가 일치합니다.');
+        setDatas((prev) => ({ ...prev, password: password.password1 }));
       }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [password]);
-
-  const handleEmailClick = () => {
-    //email 인증 api
+    }
   };
+
+  const emailApi = useEmailVerify()
+  const handleEmailClick = () => {
+    emailApi.mutate({email :datas.email})
+  };
+
+  const authCodeCheckApi = useEmailAuthCodeCheck()
+  const handleBlurCodeCheck = () => {
+    authCodeCheckApi.mutate({email : datas.email, authCode : code})
+  }
+
+  const signupApi = useAuthSignupApi()
+  const handleSignupClick = () => {
+    signupApi.mutate({email : datas.email, name: datas.name, password: datas.password}, {
+      onSuccess: () => {
+        router.push('/login')
+      }
+    })
+  }
 
   return (
     <Flex
@@ -73,6 +87,8 @@ export default function SignUp() {
       paddingBottom="100px"
       paddingTop="100px"
     >
+      <Flex isColumn={true} gap={20} width="428px" alignItems='center'>
+
       <Flex isColumn={true} gap={64} width="428px">
         <Flex isColumn={true} gap={16}>
           <Text fontSize={36} fontWeight={700}>
@@ -84,10 +100,10 @@ export default function SignUp() {
         </Flex>
         <Flex isColumn={true} gap={32} width="100%">
           <Inputs
-            placeholder="아이디를 입력하세요"
-            label="아이디"
-            onChange={handleIdChange}
-            value={datas.id}
+            placeholder="이름을 입력하세요"
+            label="이름"
+            onChange={handleNameChange}
+            value={datas.name}
           />
           <Flex gap={10} width="100%" alignItems="end">
             <Inputs
@@ -103,6 +119,7 @@ export default function SignUp() {
             label="인증코드"
             onChange={handleCodeChange}
             value={code}
+            onBlur={handleBlurCodeCheck}
           />
           <Inputs
             placeholder="비밀번호를 입력하세요"
@@ -117,12 +134,21 @@ export default function SignUp() {
             onChange={handlePwdCheckChange}
             value={password.password2}
             isPwd={true}
+            onBlur={handlePwdCheckBlur}
           />
         </Flex>
-        <Button onClick={() => router.push('/login')} width="100%">
+        <Button onClick={handleSignupClick} width="100%">
           회원가입
         </Button>
+      </Flex>
+       <Flex gap={8}><Text fontSize={16} fontWeight={400} color={colors.gray[600]}>이미 계정이 있다면?</Text><Nav  onClick={() => router.push('/login')}>로그인</Nav></Flex>
       </Flex>
     </Flex>
   );
 }
+
+const Nav = styled.button `
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 16px;
+`

@@ -5,13 +5,24 @@ import { colors, Flex, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Cookies  from 'js-cookie';
+import { useUserMe } from '@/apis';
+
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [name, setName] = useState<string>('박지연');
-  const accessToken = '2345';
+  const [name, setName] = useState<string>('Error');
+  const accessToken = Cookies.get('accessToken');
+
+  const {data} = useUserMe();
+
+  useEffect(() => {
+    if (data?.name) {
+      setName(data.name);
+    }
+  },[data])
 
   const [planPath, setPlanPath] = useState<boolean>(false);
 

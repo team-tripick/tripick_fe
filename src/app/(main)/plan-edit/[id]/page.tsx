@@ -1,5 +1,6 @@
 'use client';
 
+import { usePlanDetail, usePlanEdit } from '@/apis';
 import {
   Button,
   DateInput,
@@ -9,7 +10,7 @@ import {
   MarkDownContent,
 } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function PlanEdit() {
@@ -27,10 +28,30 @@ export default function PlanEdit() {
     plan: '',
   });
 
+  const id = useParams()
+  const planId = Number(id.id);
+
+  const {data} = usePlanDetail(planId)
+
   const [date, setDate] = useState<{ startDate: string; endDate: string }>({
     startDate: '',
     endDate: '',
   });
+
+  useEffect(() => {
+      if (data && typeof data === 'object') {
+        setDatas((prev) => ({
+          ...prev,
+          place: data.place,
+          plan: data.plan,
+          keyword: data.keyword
+        }));
+        setDate({
+          startDate: data.startDate,
+          endDate: data.endDate
+        })
+      }
+    }, [data]);
 
   useEffect(() => {
     setDatas((prev) => ({
@@ -72,8 +93,13 @@ export default function PlanEdit() {
     });
   };
 
+  const editApi = usePlanEdit()
   const handleEditClick = () => {
-    //edit api
+    editApi.mutate({place : datas.place, keyword: datas.keyword, date: datas.date, plan: datas.plan, planId: planId}, {
+      onSuccess: () => {
+        router.push(`/plan-detail/${planId}`)
+      }
+    })
   };
 
   return (
@@ -108,6 +134,7 @@ export default function PlanEdit() {
       </Flex>
       <Flex gap={40} isColumn={true} width="100%">
         <DropDown
+          value={datas.place}
           onChange={(value) =>
             setDatas((prev) => ({ ...prev, place: value.toString() }))
           }

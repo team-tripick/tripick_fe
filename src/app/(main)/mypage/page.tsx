@@ -1,20 +1,31 @@
 'use client';
 
+import { useUserDel, useUserMe } from '@/apis';
 import { Button, UserDelModal } from '@/components';
 import { colors, Flex, Skeleton, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
 
 export default function Mypage() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [datas, setDatas] = useState<{ email: string; name: string }>({
-    email: 'pjylove08@gmail.com',
-    name: '박지연',
+    email: 'Error',
+    name: 'Error',
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const {data} = useUserMe();
+
+  useEffect(() => {
+    if(data?.name && datas?.email) {
+      setDatas({email : data.email, name : data.name})
+    }
+  },[data])
 
   useEffect(() => {
     setTimeout(() => {
@@ -26,12 +37,22 @@ export default function Mypage() {
     setIsOpen(true);
   };
 
+
+  const userDelApi = useUserDel()
   const handleUserRealDelClick = () => {
-    //탈퇴 api
+    userDelApi.mutate(undefined, {
+      onSuccess: () => {
+        router.push('/login')
+        Cookies.remove('accessToken')
+        Cookies.remove('refreshToken')
+      }
+    })
   };
 
   const handleLogoutClick = () => {
-    //쿠키 삭제
+    Cookies.remove('accessToken')
+    Cookies.remove('refreshToken')
+    toast.success('로그아웃이 완료되었습니다.')
     router.push('/login');
   };
   return (
