@@ -66,8 +66,6 @@ export default function PlanWrite() {
   };
 
 
-  console.log(datas.place)
-
   const handleKeywordDel = (index: number) => {
     setDatas((prev) => {
       const newKeywords = [...prev.keyword];

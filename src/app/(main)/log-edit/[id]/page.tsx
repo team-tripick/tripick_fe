@@ -28,9 +28,6 @@ export default function LogEdit() {
   
   const {data} = useLogDetail(logId)
 
-  console.log(data)
-  console.log(datas)
-
     useEffect(() => {
       if (data && typeof data === 'object') {
         setDatas((prev) => ({
