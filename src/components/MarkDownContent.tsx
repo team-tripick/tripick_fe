@@ -4,6 +4,10 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import 'highlight.js/styles/github.css';
 
 interface IMarkdownType {
   label?: string;
@@ -24,6 +28,10 @@ export default function MarkDownContent({
     setDatas(e.target.value);
     onChange?.(e);
   };
+
+  // value가 있으면 value를 사용하고, 없으면 datas를 사용
+  const displayValue = value !== undefined ? value : datas;
+
   return (
     <Flex isColumn={true} gap={8} width="100%">
       <Text fontWeight={400} fontSize={16}>
@@ -32,13 +40,64 @@ export default function MarkDownContent({
       <Line />
       <Flex gap={40} width="100%">
         <TextArea
-          value={value}
+          value={displayValue}
           onChange={handleContentChange}
           placeholder={placeholder}
         />
         <MarkDown>
-          <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>
-            {datas}
+          <ReactMarkdown 
+            remarkPlugins={[remarkBreaks, remarkGfm]}
+            rehypePlugins={[
+              rehypeRaw,
+              rehypeHighlight,
+              rehypeSlug,
+            ]}
+            components={{
+              blockquote: ({children}) => (
+                <blockquote style={{
+                  borderLeft: '4px solid #ddd',
+                  paddingLeft: '16px',
+                  margin: '1em 0',
+                  fontStyle: 'italic',
+                  color: '#666'
+                }}>
+                  {children}
+                </blockquote>
+              ),
+              code: ({ children, className, ...props}) => {
+                  return (
+                    <code
+                      style={{
+                        backgroundColor: '#f6f8fa',
+                        padding: '2px 4px',
+                        borderRadius: '3px',
+                        fontSize: '0.9em'
+                      }}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
+                return (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+              pre: ({children}) => (
+                <pre style={{
+                  backgroundColor: '#f6f8fa',
+                  padding: '16px',
+                  borderRadius: '6px',
+                  overflow: 'auto',
+                  marginBottom: '16px'
+                }}>
+                  {children}
+                </pre>
+              ),
+            }}
+          >
+            {displayValue}
           </ReactMarkdown>
         </MarkDown>
       </Flex>
@@ -51,7 +110,7 @@ const MarkDown = styled.div`
   height: 300px;
   overflow-y: scroll;
   line-height: 1.6;
-`;
+`
 
 const TextArea = styled.textarea`
   width: 50%;

@@ -33,7 +33,6 @@ const style = css`
     outline: 0;
     box-sizing: border-box;
     border: 0;
-    list-style: none;
     font-style: normal;
     font-family: 'Pretendard', sans-serif;
 
@@ -51,6 +50,36 @@ const style = css`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+  }
+
+  blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 16px;
+    margin: 1em 0;
+    font-style: italic;
+    color: #666;
+  }
+  
+  code {
+    background-color: #f6f8fa;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  
+  pre {
+    background-color: #f6f8fa;
+    padding: 16px;
+    border-radius: 6px;
+    overflow: auto;
+    margin-bottom: 16px;
+  }
+  
+  pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
   }
 `;
 

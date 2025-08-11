@@ -7,6 +7,12 @@ import styled from '@emotion/styled';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import 'highlight.js/styles/github.css';
 
 type LogItem = {
   title: string;
@@ -17,10 +23,10 @@ type LogItem = {
 
 export default function PlanDetail() {
   const router = useRouter();
-  const id = useParams()
+  const id = useParams();
   const planId = Number(id.id);
 
-  const {data} = usePlanDetail(planId)
+  const { data } = usePlanDetail(planId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [datas, setDatas] = useState<{
@@ -57,30 +63,29 @@ export default function PlanDetail() {
     }
   }, [data]);
 
-  const [isMedia, setIsMedia] = useState<boolean>(false)
-  
+  const [isMedia, setIsMedia] = useState<boolean>(false);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMedia(window.innerWidth <= 1007);
-    };  
+    };
     handleResize();
     window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
-  },[])
 
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleDelClick = () => {
     setIsOpen(true);
   };
 
-  const planDelApi = usePlanDel()
+  const planDelApi = usePlanDel();
   const handleRealDelClick = () => {
     planDelApi.mutate(planId, {
       onSuccess: () => {
-        router.push('/plan')
-      }
-    })
+        router.push('/plan');
+      },
+    });
   };
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -92,14 +97,10 @@ export default function PlanDetail() {
   }, []);
 
   return (
-    <Flex
-      isColumn={true}
-      width="100%"
-      gap={50}
-    >
+    <Flex isColumn={true} width="100%" gap={50}>
       <Flex width="100%" justifyContent="space-between">
         <Flex isColumn={true} gap={12}>
-          <Flex gap={24} alignItems="center" flexWrap='wrap'>
+          <Flex gap={24} alignItems="center" flexWrap="wrap">
             {isLoading ? (
               <TextSkeleton>{datas.title}</TextSkeleton>
             ) : (
@@ -123,13 +124,28 @@ export default function PlanDetail() {
             </TextSkeleton>
           ) : (
             <Flex alignItems="center" gap={4}>
-              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text
+                isMedia={true}
+                fontSize={20}
+                fontWeight={400}
+                color={colors.gray[600]}
+              >
                 {datas.date.startDate}
               </Text>
-              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text
+                isMedia={true}
+                fontSize={20}
+                fontWeight={400}
+                color={colors.gray[600]}
+              >
                 ~
               </Text>
-              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text
+                isMedia={true}
+                fontSize={20}
+                fontWeight={400}
+                color={colors.gray[600]}
+              >
                 {datas.date.endDate}
               </Text>
             </Flex>
@@ -144,7 +160,60 @@ export default function PlanDetail() {
         <TextSkeleton>{datas.plan}</TextSkeleton>
       ) : (
         <Mark>
-          <ReactMarkdown>{datas.plan.replace(/\n/g, '  \n')}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkBreaks, remarkGfm]}
+            rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
+            components={{
+              blockquote: ({ children }) => (
+                <blockquote
+                  style={{
+                    borderLeft: '4px solid #ddd',
+                    paddingLeft: '16px',
+                    margin: '1em 0',
+                    fontStyle: 'italic',
+                    color: '#666',
+                  }}
+                >
+                  {children}
+                </blockquote>
+              ),
+              code: ({ children, className, ...props }) => {
+                  return (
+                    <code
+                      style={{
+                        backgroundColor: '#f6f8fa',
+                        padding: '2px 4px',
+                        borderRadius: '3px',
+                        fontSize: '0.9em',
+                      }}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
+                return (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+              pre: ({ children }) => (
+                <pre
+                  style={{
+                    backgroundColor: '#f6f8fa',
+                    padding: '16px',
+                    borderRadius: '6px',
+                    overflow: 'auto',
+                    marginBottom: '16px',
+                  }}
+                >
+                  {children}
+                </pre>
+              ),
+            }}
+          >
+            {datas.plan.replace(/\n/g, '  \n')}
+          </ReactMarkdown>
         </Mark>
       )}
       <Flex isColumn={true} gap={20} width="100%">
@@ -153,7 +222,7 @@ export default function PlanDetail() {
             여행 일지
           </Text>
           <Button onClick={() => router.push(`/log-write/${planId}`)}>
-            {isMedia ? "일지 작성 " : "여행 일지 작성하기"}
+            {isMedia ? '일지 작성 ' : '여행 일지 작성하기'}
           </Button>
         </Flex>
         <Flex width="100%" isColumn={true} gap={16}>
@@ -170,11 +239,7 @@ export default function PlanDetail() {
         </Flex>
       </Flex>
       {isOpen && (
-        <DelModal
-          delClick={handleRealDelClick}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-        />
+        <DelModal delClick={handleRealDelClick} isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
     </Flex>
   );
@@ -190,6 +255,7 @@ const Mark = styled.div`
 const Btn = styled.div`
   font-size: 16px;
   color: ${colors.gray[600]};
+  flex-shrink: 0;
 `;
 
 const TextSkeleton = styled(Skeleton)`
