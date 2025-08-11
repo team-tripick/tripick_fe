@@ -62,9 +62,9 @@ export default function Mypage() {
           {isLoading ? (
             <TextSkeleton>{datas.name}님</TextSkeleton>
           ) : (
-            <Text isSpan={true} fontSize={32} fontWeight={700}>
+            <Text isMedia={true} isSpan={true} fontSize={32} fontWeight={700}>
               {datas.name}
-              <Text isSpan={true} fontSize={32} fontWeight={400}>
+              <Text isMedia={true} isSpan={true} fontSize={32} fontWeight={400}>
                 님
               </Text>
             </Text>
@@ -78,11 +78,11 @@ export default function Mypage() {
           )}
         </Flex>
         <MessageContainer>
-          <Text fontSize={20} fontWeight={600} color={colors.gray[800]}>
+          <Text isMedia={true} fontSize={20} fontWeight={600} color={colors.gray[800]}>
             tripick의 한마디
           </Text>
           <Line />
-          <Text fontSize={20} fontWeight={400} color={colors.gray[800]}>
+          <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[800]}>
             Tripick은 당신의 여행 계획과 소중한 추억을 하나로 기록하는 여행
             동반자입니다.
           </Text>
