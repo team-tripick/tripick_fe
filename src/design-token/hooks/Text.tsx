@@ -44,7 +44,7 @@ export const Text = ({
     if (!isMedia) return;  // isMedia가 false면 미디어 체크 안함
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 420);
+      setIsMobile(window.innerWidth <= 656);
     };
     handleResize(); // 최초 실행
     window.addEventListener('resize', handleResize);

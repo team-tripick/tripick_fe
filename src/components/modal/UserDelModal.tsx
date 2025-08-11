@@ -35,10 +35,10 @@ export default function UserDelModal({
       <Modal onClick={(e) => e.stopPropagation()}>
         <Flex isColumn={true} gap={32} alignItems="center">
           <Flex isColumn={true} gap={20} alignItems="center">
-            <Text fontSize={32} fontWeight={700}>
+            <Text isMedia={true} fontSize={32} fontWeight={700}>
               계정을 탈퇴하시겠습니까?
             </Text>
-            <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+            <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
               탈퇴한 계정은 다시 되돌릴 수 없습니다.
             </Text>
           </Flex>
@@ -73,6 +73,9 @@ const Modal = styled.div`
   border-radius: 24px;
   padding: 67px 134px;
   z-index: 1001;
+  @media (max-width : 656px) {
+    padding: 40px 30px;
+  }
 `;
 
 const DelBack = styled.div`
@@ -83,8 +86,8 @@ const DelBack = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: #00000081;
   position: fixed;
   top: 0;
