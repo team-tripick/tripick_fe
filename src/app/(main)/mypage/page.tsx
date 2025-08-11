@@ -56,7 +56,7 @@ export default function Mypage() {
     router.push('/login');
   };
   return (
-    <Flex paddingTop="100px" paddingLeft="100px" paddingRight="100px">
+    <Flex paddingTop="30px">
       <Flex isColumn={true} gap={24} width="100%">
         <Flex isColumn={true} gap={12}>
           {isLoading ? (

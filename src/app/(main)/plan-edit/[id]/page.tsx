@@ -154,12 +154,8 @@ export default function PlanEdit() {
     <Flex
       isColumn={true}
       gap={80}
-      paddingLeft="100px"
-      paddingRight="100px"
-      paddingTop="70px"
-      paddingBottom="70px"
     >
-      <Flex width="100%" justifyContent="space-between" alignItems="center">
+      <Flex width="100%" flexWrap="wrap" gap={12} justifyContent="space-between" alignItems="center">
         <Flex isColumn={true} gap={16}>
           <Text fontSize={36} fontWeight={700}>
             여행계획 수정
@@ -189,7 +185,7 @@ export default function PlanEdit() {
           label="여행지"
           datas={dropData}
         />
-        <Flex isColumn={true} gap={14} width={'743px'}>
+        <Flex isColumn={true} gap={14} width={'100%'}>
           <Inputs
             onChange={handleKeywordInput}
             onKeyUp={handleKeywordKeyDown}
@@ -197,7 +193,7 @@ export default function PlanEdit() {
             label="키워드"
             placeholder="키워드를 입력하세요"
           />
-          <Flex gap={12}>
+          <Flex gap={12} flexWrap="wrap">
             {datas.keyword.map((data, index) => (
               <Keyword key={index} onClick={() => handleKeywordDel(index)}>
                 {data}

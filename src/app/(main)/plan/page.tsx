@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export default function Plan() {
   const router = useRouter();
+  const [isMedia, setIsMedia] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [datas, setDatas] = useState<
     {
@@ -18,6 +19,17 @@ export default function Plan() {
       keyword: string[];
     }[]
   >([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMedia(window.innerWidth <= 510);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  },[])
 
   const { data } = usePlanAll();
 
@@ -43,31 +55,29 @@ export default function Plan() {
 
   return (
     <Flex
-      paddingBottom="70px"
-      paddingTop="70px"
-      paddingLeft="100px"
-      paddingRight="100px"
       width="100%"
       isColumn={true}
       gap={16}
+      flexWrap='wrap'
     >
-      <Flex width="100%" justifyContent="space-between" alignItems="center">
-        <Text fontSize={24} fontWeight={600}>
+      <Flex flexWrap='wrap' width="100%" justifyContent="space-between" alignItems="center">
+        <Text isMedia={true} fontSize={24} fontWeight={600}>
           여행 계획
         </Text>
         <Button onClick={() => router.push('/plan-write')}>
-          여행 계획 작성하기
+          {isMedia? "계획 작성" :  "여행 계획 작성하기"}
         </Button>
       </Flex>
 
       <Text
+        isMedia={true}
         isSpan={true}
         color={colors.orange[500]}
         fontSize={20}
         fontWeight={600}
       >
         {datas.length}
-        <Text isSpan={true} fontSize={20}>
+        <Text isMedia={true} isSpan={true} fontSize={20}>
           개
         </Text>
       </Text>

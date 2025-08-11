@@ -65,10 +65,6 @@ export default function LogDetail() {
       isColumn={true}
       width="100%"
       gap={50}
-      paddingBottom="70px"
-      paddingLeft="100px"
-      paddingRight="100px"
-      paddingTop="70px"
     >
       <Flex width="100%" justifyContent="space-between">
         <Flex isColumn={true} gap={12}>

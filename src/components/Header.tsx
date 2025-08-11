@@ -65,18 +65,21 @@ export default function Header() {
 }
 
 const HeaderContainer = styled.header`
-  width: 100%;
+  width: 100vw;
   height: 68px;
   background-color: ${colors.gray[100]};
   border-bottom: 1px solid ${colors.gray[300]};
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 190px;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
+  padding: 0 190px;
+  @media (max-width : 610px) {
+    padding: 0 40px;
+  }
 `;
 
 const Btn = styled.div`

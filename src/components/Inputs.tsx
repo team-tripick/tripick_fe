@@ -35,7 +35,7 @@ export default function Inputs({
   };
   return (
     <Flex isColumn={true} gap={8} width="100%">
-      <Text fontWeight={400} fontSize={16}>
+      <Text  isMedia={true} fontWeight={400} fontSize={16}>
         {label}
       </Text>
       <InputContainer>
