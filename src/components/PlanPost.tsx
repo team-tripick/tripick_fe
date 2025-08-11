@@ -26,28 +26,28 @@ export default function PlanPost({
           {isLoading ? (
             <TextSkeleton>{title}</TextSkeleton>
           ) : (
-            <Text fontSize={20} fontWeight={600}>
+            <Text isMedia={true} fontSize={20} fontWeight={600}>
               {title}
             </Text>
           )}
           {isLoading ? (
             <TextSkeleton>{content}</TextSkeleton>
           ) : (
-            <Text fontSize={16} fontWeight={400}>
+            <Text isMedia={true} fontSize={16} fontWeight={400}>
               {content}
             </Text>
           )}
         </Flex>
-        <Flex gap={24} alignItems="center">
+        <Flex flexWrap="wrap" gap={24} alignItems="center">
           {isLoading ? (
             <TextSkeleton>{date}</TextSkeleton>
           ) : (
-            <Text fontSize={16} fontWeight={400} color={colors.gray[500]}>
+            <Text isMedia={true} fontSize={16} fontWeight={400} color={colors.gray[500]}>
               {date}
             </Text>
           )}
 
-          <Flex gap={8} alignItems="center">
+          <Flex flexWrap="wrap" gap={8} alignItems="center">
             {isLoading ? (
               <TextSkeleton>{keyword}</TextSkeleton>
             ) : (

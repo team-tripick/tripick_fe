@@ -23,14 +23,14 @@ export default function LogPost({
           {isLoading ? (
             <TextSkeleton>{title}</TextSkeleton>
           ) : (
-            <Text fontSize={20} fontWeight={600}>
+            <Text isMedia={true} fontSize={20} fontWeight={600}>
               {title}
             </Text>
           )}
           {isLoading ? (
             <TextSkeleton>{content}</TextSkeleton>
           ) : (
-            <Text fontSize={16} fontWeight={400}>
+            <Text isMedia={true} fontSize={16} fontWeight={400}>
               {content}
             </Text>
           )}
@@ -38,7 +38,7 @@ export default function LogPost({
         {isLoading ? (
           <TextSkeleton>{date}</TextSkeleton>
         ) : (
-          <Text fontSize={16} fontWeight={400} color={colors.gray[500]}>
+          <Text isMedia={true} fontSize={16} fontWeight={400} color={colors.gray[500]}>
             {date}
           </Text>
         )}
