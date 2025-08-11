@@ -21,4 +21,8 @@ export default function HeadLayout({
 
 const MainContent = styled.main`
   margin-top: 68px;
+  padding: 70px 100px;
+  @media (max-width : 420px) {
+    padding: 40px 40px;
+  }
 `;

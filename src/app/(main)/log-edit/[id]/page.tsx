@@ -70,12 +70,8 @@ export default function LogEdit() {
     <Flex
       isColumn={true}
       gap={80}
-      paddingLeft="100px"
-      paddingRight="100px"
-      paddingTop="70px"
-      paddingBottom="70px"
     >
-      <Flex width="100%" justifyContent="space-between" alignItems="center">
+      <Flex gap={12} flexWrap='wrap' width="100%" justifyContent="space-between" alignItems="center">
         <Flex isColumn={true} gap={16}>
           <Text fontSize={36} fontWeight={700}>
             여행일지 수정
@@ -98,7 +94,6 @@ export default function LogEdit() {
       </Flex>
       <Flex gap={40} isColumn={true} width="100%">
         <Inputs
-          width="743px"
           onChange={handleTitleChange}
           value={datas.title}
           label="키워드"

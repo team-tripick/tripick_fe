@@ -92,15 +92,17 @@ export default function SignUp() {
       width="100%"
       paddingBottom="100px"
       paddingTop="100px"
+      paddingLeft='20px'
+      paddingRight='20px'
     >
-      <Flex isColumn={true} gap={20} width="428px" alignItems='center'>
+      <Flex isColumn={true} gap={20} width="100%" alignItems='center'>
 
-      <Flex isColumn={true} gap={64} width="428px">
+      <Flex isColumn={true} gap={64} width="100%">
         <Flex isColumn={true} gap={16}>
-          <Text fontSize={36} fontWeight={700}>
+          <Text isMedia={true} fontSize={36} fontWeight={700}>
             회원가입
           </Text>
-          <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+          <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
             회원가입 후 Tripick을 이용해보세요
           </Text>
         </Flex>

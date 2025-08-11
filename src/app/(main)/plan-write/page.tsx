@@ -138,17 +138,13 @@ export default function PlanWrite() {
     <Flex
       isColumn={true}
       gap={80}
-      paddingLeft="100px"
-      paddingRight="100px"
-      paddingTop="70px"
-      paddingBottom="70px"
     >
-      <Flex width="100%" justifyContent="space-between" alignItems="center">
+      <Flex width="100%" gap={12} flexWrap='wrap' justifyContent="space-between" alignItems="center">
         <Flex isColumn={true} gap={16}>
-          <Text fontSize={36} fontWeight={700}>
+          <Text isMedia={true} fontSize={36} fontWeight={700}>
             여행계획 작성
           </Text>
-          <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+          <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
             여행 계획을 작성해보세요
           </Text>
         </Flex>
@@ -172,7 +168,7 @@ export default function PlanWrite() {
           label="여행지"
           datas={dropData}
         />
-        <Flex isColumn={true} gap={14} width={'743px'}>
+        <Flex isColumn={true} gap={14} width={'100%'}>
           <Inputs
             onChange={handleKeywordInput}
             onKeyUp={handleKeywordKeyDown}
@@ -180,7 +176,7 @@ export default function PlanWrite() {
             label="키워드"
             placeholder="키워드를 입력하세요"
           />
-          <Flex gap={12}>
+          <Flex gap={12} flexWrap="wrap">
             {datas.keyword.map((data, index) => (
               <Keyword key={index} onClick={() => handleKeywordDel(index)}>
                 {data}

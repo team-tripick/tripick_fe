@@ -40,14 +40,16 @@ export default function Login() {
       alignItems="center"
       width="100%"
       height="calc(100vh - 80px)"
+      paddingLeft='20px'
+      paddingRight='20px'
     >
       <Flex isColumn={true} gap={20} width="428px" alignItems='center'>
       <Flex isColumn={true} gap={64} width="100%">
         <Flex isColumn={true} gap={16}>
-          <Text fontSize={36} fontWeight={700}>
+          <Text fontSize={36} fontWeight={700} isMedia={true}>
             로그인
           </Text>
-          <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+          <Text fontSize={20} fontWeight={400}  isMedia={true} color={colors.gray[600]}>
             로그인 후 Tripick을 이용해보세요
           </Text>
         </Flex>

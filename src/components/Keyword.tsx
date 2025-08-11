@@ -23,4 +23,7 @@ const KeywordContainer = styled.div`
   font-weight: 400;
   color: ${colors.orange[400]};
   background-color: #ffae3d16;
+  @media (max-width: 420px) {
+    font-size: 9px;
+  }
 `;

@@ -41,21 +41,33 @@ export default function PlanDetail() {
   });
 
   useEffect(() => {
-  if (data && typeof data === 'object') {
-    setDatas({
-      title: data.place,
-      plan: data.plan,
-      date: { startDate: data.startDate, endDate: data.endDate },
-      keyword: data.keyword ?? [],
-      log: (data.logs ?? []).map((logItem: LogItem) => ({
-        title: logItem.title,
-        content: logItem.log,
-        date: logItem.createdAt,
-        id: logItem.logId,
-      })),
-    });
-  }
-}, [data]);
+    if (data && typeof data === 'object') {
+      setDatas({
+        title: data.place,
+        plan: data.plan,
+        date: { startDate: data.startDate, endDate: data.endDate },
+        keyword: data.keyword ?? [],
+        log: (data.logs ?? []).map((logItem: LogItem) => ({
+          title: logItem.title,
+          content: logItem.log,
+          date: logItem.createdAt,
+          id: logItem.logId,
+        })),
+      });
+    }
+  }, [data]);
+
+  const [isMedia, setIsMedia] = useState<boolean>(false)
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMedia(window.innerWidth <= 1007);
+    };  
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  },[])
 
 
   const handleDelClick = () => {
@@ -84,10 +96,6 @@ export default function PlanDetail() {
       isColumn={true}
       width="100%"
       gap={50}
-      paddingBottom="70px"
-      paddingLeft="100px"
-      paddingRight="100px"
-      paddingTop="70px"
     >
       <Flex width="100%" justifyContent="space-between">
         <Flex isColumn={true} gap={12}>
@@ -95,11 +103,11 @@ export default function PlanDetail() {
             {isLoading ? (
               <TextSkeleton>{datas.title}</TextSkeleton>
             ) : (
-              <Text fontSize={36} fontWeight={700}>
+              <Text isMedia={true} fontSize={36} fontWeight={700}>
                 {datas.title}
               </Text>
             )}
-            <Flex gap={12}>
+            <Flex gap={12} flexWrap="wrap">
               {isLoading ? (
                 <TextSkeleton>{datas.keyword}</TextSkeleton>
               ) : (
@@ -115,13 +123,13 @@ export default function PlanDetail() {
             </TextSkeleton>
           ) : (
             <Flex alignItems="center" gap={4}>
-              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
                 {datas.date.startDate}
               </Text>
-              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
                 ~
               </Text>
-              <Text fontSize={20} fontWeight={400} color={colors.gray[600]}>
+              <Text isMedia={true} fontSize={20} fontWeight={400} color={colors.gray[600]}>
                 {datas.date.endDate}
               </Text>
             </Flex>
@@ -141,11 +149,11 @@ export default function PlanDetail() {
       )}
       <Flex isColumn={true} gap={20} width="100%">
         <Flex width="100%" justifyContent="space-between" alignItems="center">
-          <Text fontSize={24} fontWeight={600}>
+          <Text isMedia={true} fontSize={24} fontWeight={600}>
             여행 일지
           </Text>
           <Button onClick={() => router.push(`/log-write/${planId}`)}>
-            여행 일지 작성하기
+            {isMedia ? "일지 작성 " : "여행 일지 작성하기"}
           </Button>
         </Flex>
         <Flex width="100%" isColumn={true} gap={16}>
