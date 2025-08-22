@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { BeatLoader } from 'react-spinners';
 
 
 export default function Login() {
@@ -15,6 +16,7 @@ export default function Login() {
     email: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDatas((prev) => ({ ...prev, email: e.target.value }));
@@ -27,12 +29,23 @@ export default function Login() {
   const loginApi = useAuthLoginApi()
 
   const handleLoginClick = () => {
-    loginApi.mutate({email : datas.email, password: datas.password}, {
-      onSuccess: () => {
-        router.push('/')
+    setIsLoading(true);
+    loginApi.mutate(
+      { email: datas.email, password: datas.password },
+      {
+        onSuccess: () => {
+          setTimeout(() => {
+            setIsLoading(false);
+            router.push('/');
+          }, 100);
+        },
+        onError: () => {
+          setIsLoading(false);
+        },
       }
-    })
-  }
+    );
+  };
+
 
   return (
     <Flex
@@ -74,9 +87,26 @@ export default function Login() {
       </Flex>
       <Flex gap={8}><Text fontSize={16} fontWeight={400} color={colors.gray[600]}>계정이 없다면?</Text><Nav onClick={() => router.push('/signup')}>회원가입</Nav></Flex>
       </Flex>
+      {isLoading && (
+        <Background>
+          <BeatLoader color={colors.orange[500]} size={"30px"}/>
+        </Background>
+      )}
     </Flex>
   );
 }
+const Background = styled.div `
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0, 0.08);
+  z-index: 1000;
+`
 
 const Nav = styled.button `
   cursor: pointer;
