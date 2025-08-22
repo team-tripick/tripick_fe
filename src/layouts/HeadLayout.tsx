@@ -3,6 +3,7 @@
 import { Header } from '@/components';
 import styled from '@emotion/styled';
 import { GlobalStyle } from '@/design-token';
+import { useLoginCheck } from '@/hooks';
 
 
 export default function HeadLayout({
@@ -10,6 +11,7 @@ export default function HeadLayout({
 }: {
   children: React.ReactNode;
 }) {
+  useLoginCheck();
   return (
     <>
       <Header />
