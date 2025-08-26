@@ -1,7 +1,7 @@
 'use client';
 
 import { Logo, MainMacImg } from '@/assets';
-import { Header, ImgSlide } from '@/components';
+import { Header, ImgSlide, NavBar } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
@@ -113,6 +113,7 @@ export default function Main() {
         </Text>
         <Logo width="167.2" height="38" />
       </ThirdBack>
+      <NavBar/>
     </Flex>
   );
 }
