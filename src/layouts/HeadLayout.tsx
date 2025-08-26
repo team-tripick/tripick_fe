@@ -1,6 +1,6 @@
 'use client';
 
-import { Header } from '@/components';
+import { Header, NavBar } from '@/components';
 import styled from '@emotion/styled';
 import { GlobalStyle } from '@/design-token';
 import { useLoginCheck } from '@/hooks';
@@ -16,6 +16,7 @@ export default function HeadLayout({
     <>
       <Header />
       <MainContent>{children}</MainContent>
+      <NavBar/>
       <GlobalStyle />
     </>
   );
