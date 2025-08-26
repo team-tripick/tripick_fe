@@ -89,7 +89,7 @@ export default function Login() {
       </Flex>
       {isLoading && (
         <Background>
-          <BeatLoader color={colors.orange[500]} size={"30px"}/>
+          <BeatLoader color={colors.orange[500]} size={"20px"}/>
         </Background>
       )}
     </Flex>

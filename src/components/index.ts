@@ -9,3 +9,4 @@ export { default as Keyword } from './Keyword';
 export { default as PlanPost } from './PlanPost';
 export { default as LogPost } from './LogPost';
 export * from './modal';
+export {default as NavBar} from './NavBar'

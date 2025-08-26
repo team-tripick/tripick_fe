@@ -38,7 +38,7 @@ export default function Header() {
     <HeaderContainer>
       <Logo onClick={() => router.push('/')} />
       {accessToken ? (
-        <Flex gap={55} alignItems="center">
+        <NavContainer>
           <Text
             onClick={() => router.push('/plan')}
             isCursor={true}
@@ -56,13 +56,22 @@ export default function Header() {
           >
             {name} 님
           </Text>
-        </Flex>
+        </NavContainer>
       ) : (
         <Btn onClick={() => router.push('/login')}>로그인</Btn>
       )}
     </HeaderContainer>
   );
 }
+
+const NavContainer = styled.div `
+  display: flex;
+  align-items: center;
+  gap: 55px;
+  @media (max-width : 480px) {
+    display: none;
+  }
+`
 
 const HeaderContainer = styled.header`
   width: 100vw;
