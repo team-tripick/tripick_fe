@@ -9,7 +9,6 @@ import { useEffect, useState } from "react"
 
 export default function NavBar() {
 
-   console.log("NavBar rendered!");console.log("NavBar rendered!");
   const [nav, setNav] = useState<string>("home");
   const router = useRouter();
   const pathname = usePathname();
@@ -29,7 +28,7 @@ export default function NavBar() {
   return (
     <NavContainer>
       <PlanIcon isNav={nav === "plan"} onClick={() => router.push('/plan')}/>
-      <ChatIcon isNav={nav === "chat"} onClick={() => router.push('/chat')}/>
+      <ChatIcon isNav={nav === "chat"} onClick={() => router.push('/chat-list')}/>
       <HomeIcon isNav={nav === "home"} onClick={() => router.push('/')}/>
       <MypageIcon isNav={nav === "mypage"} onClick={() => router.push('/mypage')}/>
     </NavContainer>
