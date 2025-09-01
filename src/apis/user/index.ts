@@ -28,3 +28,13 @@ export const useUserDel = () => {
     }
   })
 }
+
+export const useUserIdProfile = (userId: string) => {
+  return useQuery({
+    queryKey: ['userProfile'],
+    queryFn : async() => {
+      const { data } = await instance.get(`${path}/${userId}`);
+      return data;
+    }
+  })
+}

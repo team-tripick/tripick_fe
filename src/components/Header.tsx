@@ -25,12 +25,19 @@ export default function Header() {
   },[data])
 
   const [planPath, setPlanPath] = useState<boolean>(false);
+  const [chatPath, setChatPath] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (pathname.includes('plan') || pathname.includes('log')) {
       setPlanPath(true);
+      setChatPath(false);
+    } else if(pathname.includes('chat'))  {
+      setChatPath(true);
+      setPlanPath(false);
     } else {
       setPlanPath(false);
+      setChatPath(false);
     }
   }, [pathname]);
 
@@ -47,6 +54,15 @@ export default function Header() {
             color={planPath ? colors.orange[500] : colors.gray[900]}
           >
             여행 계획
+          </Text>
+          <Text
+            onClick={() => router.push('/chat-list')}
+            isCursor={true}
+            fontSize={16}
+            fontWeight={400}
+            color={chatPath ? colors.orange[500] : colors.gray[900]}
+          >
+            채팅
           </Text>
           <Text
             onClick={() => router.push('/mypage')}
@@ -86,7 +102,7 @@ const HeaderContainer = styled.header`
   left: 0;
   z-index: 10;
   padding: 0 190px;
-  @media (max-width : 610px) {
+  @media (max-width : 740px) {
     padding: 0 40px;
   }
 `;

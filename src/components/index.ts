@@ -10,3 +10,4 @@ export { default as PlanPost } from './PlanPost';
 export { default as LogPost } from './LogPost';
 export * from './modal';
 export {default as NavBar} from './NavBar'
+export {default as ChatPost} from './ChatPost'
