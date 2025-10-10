@@ -18,9 +18,11 @@ export default function NavBar() {
       setNav('plan')
     } else if(pathname.includes('mypage')) {
       setNav('mypage')
-    } else if(pathname.includes('chat')) {
-      setNav('chat')
-    } else {
+    } 
+    // else if(pathname.includes('chat')) {
+    //   setNav('chat')
+    // } 
+    else {
       setNav("home")
     }
   },[pathname])
@@ -28,7 +30,7 @@ export default function NavBar() {
   return (
     <NavContainer>
       <PlanIcon isNav={nav === "plan"} onClick={() => router.push('/plan')}/>
-      <ChatIcon isNav={nav === "chat"} onClick={() => router.push('/chat-list')}/>
+      {/* <ChatIcon isNav={nav === "chat"} onClick={() => router.push('/chat-list')}/> */}
       <HomeIcon isNav={nav === "home"} onClick={() => router.push('/')}/>
       <MypageIcon isNav={nav === "mypage"} onClick={() => router.push('/mypage')}/>
     </NavContainer>

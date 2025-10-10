@@ -55,7 +55,7 @@ export default function Header() {
           >
             여행 계획
           </Text>
-          <Text
+          {/* <Text
             onClick={() => router.push('/chat-list')}
             isCursor={true}
             fontSize={16}
@@ -63,7 +63,7 @@ export default function Header() {
             color={chatPath ? colors.orange[500] : colors.gray[900]}
           >
             채팅
-          </Text>
+          </Text> */}
           <Text
             onClick={() => router.push('/mypage')}
             isCursor={true}

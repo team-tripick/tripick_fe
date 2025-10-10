@@ -97,7 +97,13 @@ export default function SignUp() {
     >
       <Flex isColumn={true} gap={20} width="100%" alignItems='center'>
 
-      <Flex isColumn={true} gap={64} width="100%">
+      <div style={{
+    display: 'flex',
+    flexDirection: "column",
+    gap: `64px`,
+    width: "100%",
+    maxWidth: '420px',
+  }}>
         <Flex isColumn={true} gap={16}>
           <Text isMedia={true} fontSize={36} fontWeight={700}>
             회원가입
@@ -148,7 +154,7 @@ export default function SignUp() {
         <Button onClick={handleSignupClick} width="100%">
           회원가입
         </Button>
-      </Flex>
+      </div>
        <Flex gap={8}><Text fontSize={16} fontWeight={400} color={colors.gray[600]}>이미 계정이 있다면?</Text><Nav  onClick={() => router.push('/login')}>로그인</Nav></Flex>
       </Flex>
     </Flex>
