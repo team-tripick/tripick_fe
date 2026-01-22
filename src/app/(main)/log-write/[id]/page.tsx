@@ -86,8 +86,8 @@ export default function LogWrite() {
         <MarkDownContent
           onChange={handleMarkdownChange}
           value={datas.log}
-          label="일정 계획"
-          placeholder="일정을 입력하세요"
+          label="일지 작성"
+          placeholder="일지를 입력하세요"
         />
       </Flex>
     </Flex>
