@@ -96,15 +96,15 @@ export default function LogEdit() {
         <Inputs
           onChange={handleTitleChange}
           value={datas.title}
-          label="키워드"
-          placeholder="키워드를 입력하세요"
+          label="제목"
+          placeholder="제목을 입력하세요"
         />
         <DateInput label="일정" data={date} setData={setDate} />
         <MarkDownContent
           onChange={handleMarkdownChange}
           value={datas.log}
-          label="일정 계획"
-          placeholder="일정을 입력하세요"
+          label="일지 작성"
+          placeholder="일지를 입력하세요"
         />
       </Flex>
     </Flex>
