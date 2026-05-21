@@ -19,39 +19,30 @@ export default function LogDetail() {
   const id = useParams();
   const logId = Number(id.id);
 
-  const { data } = useLogDetail(logId);
+  const { data, isLoading: logDetailLoading } = useLogDetail(logId);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+  useEffect(
+    function useMinimumLoading() {
+      if (!logDetailLoading) {
+        const timer = setTimeout(() => setIsLoading(false), 500);
+        return () => clearTimeout(timer);
+      }
+    },
+    [logDetailLoading],
+  );
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [datas, setDatas] = useState<{
-    title: string;
-    date: { startDate: string; endDate: string };
-    log: string;
-  }>({
-    title: '',
-    date: {
-      startDate: '',
-      endDate: '',
-    },
-    log: '',
-  });
 
-  useEffect(() => {
-    if (data && typeof data === 'object') {
-      setDatas({
-        title: data.title,
-        log: data.log,
-        date: { startDate: data.startDate, endDate: data.endDate },
-      });
-    }
-  }, [data]);
+  const datas = {
+    title: data?.title ?? '',
+    log: data?.log ?? '',
+    date: {
+      startDate: data?.startDate ?? '',
+      endDate: data?.endDate ?? '',
+    },
+  };
 
   const handleDelClick = () => {
     setIsOpen(true);
@@ -137,19 +128,19 @@ export default function LogDetail() {
                 </blockquote>
               ),
               code: ({ children, className, ...props }) => {
-                  return (
-                    <code
-                      style={{
-                        backgroundColor: '#f6f8fa',
-                        padding: '2px 4px',
-                        borderRadius: '3px',
-                        fontSize: '0.9em',
-                      }}
-                      {...props}
-                    >
-                      {children}
-                    </code>
-                  );
+                return (
+                  <code
+                    style={{
+                      backgroundColor: '#f6f8fa',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                      fontSize: '0.9em',
+                    }}
+                    {...props}
+                  >
+                    {children}
+                  </code>
+                );
                 return (
                   <code className={className} {...props}>
                     {children}
@@ -176,7 +167,11 @@ export default function LogDetail() {
         </Mark>
       )}
       {isOpen && (
-        <DelModal delClick={handleRealDelClick} isOpen={isOpen} setIsOpen={setIsOpen} />
+        <DelModal
+          delClick={handleRealDelClick}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
       )}
     </Flex>
   );
