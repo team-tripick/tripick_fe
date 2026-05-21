@@ -4,21 +4,17 @@ import { Logo, MainMacImg } from '@/assets';
 import { Header, ImgSlide, NavBar } from '@/components';
 import { colors, Flex, Text } from '@/design-token';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export default function Main() {
-  const [isMedia, setIsMedia] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMedia(window.innerWidth <= 1007);
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMedia = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener('resize', callback);
+      return () => window.removeEventListener('resize', callback);
+    },
+    () => window.innerWidth <= 1007,
+    () => false,
+  );
 
   return (
     <Wrapper>
