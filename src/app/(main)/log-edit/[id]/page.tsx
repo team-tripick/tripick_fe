@@ -23,12 +23,13 @@ export default function LogEdit() {
     endDate: '',
   });
 
-  const id = useParams()
+  const id = useParams();
   const logId = Number(id.id);
-  
-  const {data} = useLogDetail(logId)
 
-    useEffect(() => {
+  const { data } = useLogDetail(logId);
+
+  useEffect(
+    function loadLogData() {
       if (data && typeof data === 'object') {
         setDatas((prev) => ({
           ...prev,
@@ -37,10 +38,12 @@ export default function LogEdit() {
         }));
         setDate({
           startDate: data.startDate,
-          endDate: data.endDate
-        })
+          endDate: data.endDate,
+        });
       }
-    }, [data]);
+    },
+    [data],
+  );
 
   useEffect(() => {
     setDatas((prev) => ({
@@ -56,22 +59,27 @@ export default function LogEdit() {
     setDatas((prev) => ({ ...prev, title: e.target.value }));
   };
 
-
-  const editApi = useLogEdit()
+  const editApi = useLogEdit();
   const handleEditClick = () => {
-    editApi.mutate({title : datas.title, date: datas.date, log: datas.log, logId: logId}, {
-      onSuccess: () => {
-        router.push(`/log-detail/${logId}`)
-      }
-    })
+    editApi.mutate(
+      { title: datas.title, date: datas.date, log: datas.log, logId: logId },
+      {
+        onSuccess: () => {
+          router.push(`/log-detail/${logId}`);
+        },
+      },
+    );
   };
 
   return (
-    <Flex
-      isColumn={true}
-      gap={80}
-    >
-      <Flex gap={12} flexWrap='wrap' width="100%" justifyContent="space-between" alignItems="center">
+    <Flex isColumn={true} gap={80}>
+      <Flex
+        gap={12}
+        flexWrap="wrap"
+        width="100%"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Flex isColumn={true} gap={16}>
           <Text fontSize={36} fontWeight={700}>
             여행일지 수정
